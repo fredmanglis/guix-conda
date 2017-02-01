@@ -56,6 +56,94 @@
  ansi-escaped strings suitable for display in a terminal")
     (license license:expat)))
 
+(define-public python-alabaster
+  (package
+   (name "python-alabaster")
+   (version "0.7.9")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (string-append
+           "https://pypi.python.org/packages/71/c3/70da7d8ac18a4f4c502887bd2549e05745fa40"
+           "3e2cd9d06a8a9910a762bc/alabaster-"
+           version
+           ".tar.gz"))
+     (sha256
+      (base32
+       "027anxzcb951gjlcc43y3rbn9qrw36d16vj9wd2smv5410xx9bs7"))))
+   (build-system python-build-system)
+   (propagated-inputs
+    `(("python-setuptools" ,python-setuptools)))
+   (home-page "https://alabaster.readthedocs.io")
+   (synopsis
+    "A configurable sidebar-enabled Sphinx theme")
+   (description
+    "A configurable sidebar-enabled Sphinx theme")
+   (license #f)))
+
+(define-public python-snowballstemmer
+  (package
+   (name "python-snowballstemmer")
+   (version "1.2.1")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (string-append
+           "https://pypi.python.org/packages/20/6b/d2a7cb176d4d664d94a6debf52cd8dbae1f720"
+           "3c8e42426daa077051d59c/snowballstemmer-"
+           version
+           ".tar.gz"))
+     (sha256
+      (base32
+       "0a0idq4y5frv7qsg2x62jd7rd272749xk4x99misf5rcifk2d7wi"))))
+   (build-system python-build-system)
+   (propagated-inputs
+    `(("python-setuptools" ,python-setuptools)))
+   (arguments
+    `(#:tests? #f))
+   (home-page
+    "https://github.com/shibukawa/snowball_py")
+   (synopsis
+    "This package provides 16 stemmer algorithms (15 + Poerter English stemmer) generated
+from Snowball algorithms.")
+   (description
+    "This package provides 16 stemmer algorithms (15 + Poerter English stemmer) generated
+from Snowball algorithms.")
+   (license license:bsd-3)))
+
+(define-public python-sphinx
+  (package
+   (name "python-sphinx")
+   (version "1.5.2")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (string-append
+           "https://pypi.python.org/packages/e3/87/e271f7f0d498c7fdaec009c27955401d18ef35"
+           "7c0d468e1eb2be36bdc68c/Sphinx-"
+           version
+           ".tar.gz"))
+     (sha256
+      (base32
+       "08n765wix63yfvxhnrhlahb2wqn877ypdpnldr571r0974wli704"))))
+   (build-system python-build-system)
+   (inputs
+    `(("python-alabaster" ,python-alabaster)
+      ("python-babel" ,python-babel)
+      ("python-docutils" ,python-docutils)
+      ("python-imagesize" ,python-imagesize)
+      ("python-jinja2" ,python-jinja2)
+      ("python-pygments" ,python-pygments)
+      ("python-requests" ,python-requests)
+      ("python-setuptools" ,python-setuptools)
+      ("python-six" ,python-six)
+      ("python-snowballstemmer"
+       ,python-snowballstemmer)))
+   (home-page "http://sphinx-doc.org/")
+   (synopsis "Python documentation generator")
+   (description "Python documentation generator")
+   (license license:bsd-3)))
+
 (define-public python-mando
   (package
     (name "python-mando")
@@ -74,6 +162,8 @@
     (build-system python-build-system)
     (propagated-inputs
      `(("python-rst2ansi" ,python-rst2ansi)))
+    (inputs
+     `(("python-sphinx" ,python-sphinx)))
     (home-page "https://mando.readthedocs.org/")
     (synopsis
      "Wrapper around argparse, allowing creation of complete CLI applications")
@@ -270,6 +360,8 @@
         (base32
          "1kl3wh1f47rc712n4bmwplbx3fqz3x9i1b587jrbpmvdva4c8f6l"))))
     (build-system python-build-system)
+    (arguments
+     `(#:tests? #f))
     (home-page
      "https://github.com/ContinuumIO/pycosat")
     (synopsis "Bindings to picosat (a SAT solver)")
@@ -294,6 +386,8 @@
         (base32
          "08gz3grrh3vph5ib1w5x1ssnpzvj077x030lx63fxs4kwg3slbfa"))))
     (build-system python-build-system)
+    (arguments
+     `(#:tests? #f))
     (home-page
      "https://docs.python.org/3.5/library/typing.html")
     (synopsis "Type Hints for Python")
@@ -318,6 +412,8 @@
         (base32
          "1xmkl8v9l9inm2pyxgc1fm5005yxm7fkd5gv74q7lj1iy5qc8n3h"))))
     (build-system python-build-system)
+    (propagated-inputs
+     `(("python-setuptools" ,python2-setuptools)))
     (arguments
      `(#:python ,python-2))
     (home-page
@@ -454,4 +550,5 @@ Sorted dictionaries are also provided.  Currently only with Key Sorted Order (KS
                                            configure-flags)))
                       ;;(call-setuppy "install" params use-setuptools?)
                       (apply system* "python" "utils/setup-testing.py"
-                             "install" '())))))))))
+                             "install" '())))))
+       #:tests? #f))))
