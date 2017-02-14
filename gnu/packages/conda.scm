@@ -36,18 +36,14 @@
     (source
      (origin
        (method url-fetch)
-       (uri (string-append
-             "https://pypi.python.org/packages/2b/52/684d9ab8c2ccfb611275f2e44d3ebc76a6a6"
-             "c56f4afacd2e91237fa07ec3/mando-"
-             version
-             ".tar.gz"))
+       (uri (pypi-uri "mando" version))
        (sha256
         (base32
          "1bicmnxzxi9bxz9bfgv2rk7297f5rbwc9v2hg2rqfqr6h27zjgw5"))))
     (build-system python-build-system)
     (propagated-inputs
      `(("python-rst2ansi" ,python-rst2ansi)))
-    (inputs
+    (native-inputs
      `(("python-sphinx" ,python-sphinx)))
     (home-page "https://mando.readthedocs.org/")
     (synopsis
@@ -64,11 +60,7 @@
     (source
      (origin
        (method url-fetch)
-       (uri (string-append
-             "https://pypi.python.org/packages/91/48/5853fa60811d6cec1043bd60b057aafc2270"
-             "6e19ab90b33d8df8155e6b8d/radon-"
-             version
-             ".tar.gz"))
+       (uri (pypi-uri "radon" version))
        (sha256
         (base32
          "15xyzavfj1zwb5rn07fs2wfi6ccys9b5q0s8hmnpqz712mifl92g"))))
@@ -126,11 +118,7 @@
     (source
      (origin
        (method url-fetch)
-       (uri (string-append
-             "https://pypi.python.org/packages/92/c7/304b651594ebc31fbe1aa201369ab7bd7e71"
-             "8928543d8cc1063d46319c30/auxlib-"
-             version
-             ".tar.gz"))
+       (uri (pypi-uri "auxlib" version))
        (sha256
         (base32
          "0pczs3a8ck3z6qhl2fldhm2dl2czxl4yj9kkhx47qlpwhy0726xj"))))
@@ -183,11 +171,7 @@
     (source
      (origin
        (method url-fetch)
-       (uri (string-append
-             "https://pypi.python.org/packages/d9/2d/f1773b60c7a78a832f606876116790730292"
-             "7cb6c7279275a0dcee102e05/ruamel.yaml-"
-             version
-             ".tar.gz"))
+       (uri (pypi-uri "ruamel.yaml" version))
        (sha256
         (base32
          "06x7vpjpnm17wrwkqras3a9xzivfvjs59qksrqssdm5190v6bzbw"))))
