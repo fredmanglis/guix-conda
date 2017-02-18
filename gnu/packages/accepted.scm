@@ -49,3 +49,90 @@
      "Python module dedicated to rendering RST (reStructuredText) documents
 to ansi-escaped strings suitable for display in a terminal.")
     (license license:expat)))
+
+(define-public python-ddt
+  (package
+    (name "python-ddt")
+    (version "1.1.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "ddt" version))
+       (sha256
+        (base32
+         "1c00ikkxr7lha97c81k938bzhgd4pbwamkjn0h4nkhr3xk00zp6n"))))
+    (build-system python-build-system)
+    (native-inputs
+     `(("python-mock" ,python-mock)
+       ("python-nose" ,python-nose)))
+    (propagated-inputs
+     `(("python-six" ,python-six)
+       ("python-pyyaml" ,python-pyyaml)))
+    (home-page "https://github.com/txels/ddt")
+    (synopsis "Data-Driven Tests")
+    (description
+     "DDT (Data-Driven Tests) allows you to multiply one test case by running
+it with different test data, and make it appear as multiple test cases.")
+    (license license:expat)))
+
+(define-public python2-ddt
+  (package-with-python2 python-ddt))
+
+(define-public python-pycosat
+  (package
+    (name "python-pycosat")
+    (version "0.6.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "pycosat" version))
+       (sha256
+        (base32
+         "1kl3wh1f47rc712n4bmwplbx3fqz3x9i1b587jrbpmvdva4c8f6l"))))
+    ;; TODO: Unundle picosat. http://fmv.jku.at/picosat/
+    (build-system python-build-system)
+    (home-page "https://github.com/ContinuumIO/pycosat")
+    (synopsis "Bindings to picosat (a SAT solver)")
+    (description
+     "This package provides efficient Python bindings to @code{picosat} on
+the C level.  When importing pycosat, the @code{picosat} solver becomes part
+of the Python process itself.  @code{picosat} is a @dfn{Boolean Satisfiability
+Problem} (SAT) solver.")
+    (license license:expat)))
+
+(define-public python2-pycosat
+  (package-with-python2 python-pycosat))
+
+(define-public python2-ruamel.ordereddict
+  (package
+    (name "python2-ruamel.ordereddict")
+    (version "0.4.9")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "ruamel.ordereddict" version))
+       (sha256
+        (base32
+         "1xmkl8v9l9inm2pyxgc1fm5005yxm7fkd5gv74q7lj1iy5qc8n3h"))))
+    (build-system python-build-system)
+    (arguments
+     `(#:python ,python-2
+       #:phases
+       (modify-phases %standard-phases
+         (delete 'check)
+         (add-after 'install 'check
+           (lambda* (#:key inputs outputs #:allow-other-keys)
+             (add-installed-pythonpath inputs outputs)
+             (zero? (system* "python" "test/testordereddict.py")))))))
+    (home-page "https://bitbucket.org/ruamel/ordereddict")
+    (synopsis "Version of dict that keeps keys in insertion order")
+    (description
+     "This is an implementation of an ordered dictionary with @dfn{Key
+Insertion Order} (KIO: updates of values do not affect the position of the
+key), @dfn{Key Value Insertion Order} (KVIO, an existing key's position is
+removed and put at the back).  The standard library module @code{OrderedDict},
+implemented later, implements a subset of @code{ordereddict} functionality.
+Sorted dictionaries are also provided.  Currently only with @dfn{Key Sorted
+Order} (KSO, no sorting function can be specified, but a transform can be
+specified to apply on the key before comparison (e.g. @code{string.lower})).")
+    (license license:expat)))
