@@ -28,36 +28,8 @@
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages base)
-  #:use-module (gnu packages accepted))
-
-(define-public python-sphinx-new
-  (package
-   (name "python-sphinx-new")
-   (version "1.5.2")
-   (source
-    (origin
-     (method url-fetch)
-     (uri (pypi-uri "Sphinx" version))
-     (sha256
-      (base32
-       "08n765wix63yfvxhnrhlahb2wqn877ypdpnldr571r0974wli704"))))
-   (build-system python-build-system)
-   (propagated-inputs
-    `(("python-sphinx-alabaster-theme" ,python-sphinx-alabaster-theme)
-      ("python-babel" ,python-babel)
-      ("python-docutils" ,python-docutils)
-      ("python-imagesize" ,python-imagesize)
-      ("python-jinja2" ,python-jinja2)
-      ("python-pygments" ,python-pygments)
-      ("python-requests" ,python-requests)
-      ("python-setuptools" ,python-setuptools)
-      ("python-six" ,python-six)
-      ("python-snowballstemmer"
-       ,python-snowballstemmer)))
-   (home-page "http://sphinx-doc.org/")
-   (synopsis "Python documentation generator")
-   (description "Python documentation generator")
-   (license license:bsd-3)))
+  #:use-module (gnu packages accepted)
+  #:use-module (gnu packages updated-version))
 
 (define-public python-pockets
   (package
@@ -83,30 +55,6 @@
     "A collection of helpful Python tools!")
    (license license:bsd-3)))
 
-(define-public python-sphinxcontrib-napoleon
-  (package
-   (name "python-sphinxcontrib-napoleon")
-   (version "0.6.0")
-   (source
-    (origin
-     (method url-fetch)
-     (uri (pypi-uri "sphinxcontrib-napoleon" version))
-     (sha256
-      (base32
-       "0bqs1n4r00xdm18hpcvcb8ik5shcj7pdwny5fcz62hj3kdzdka3y"))))
-   (build-system python-build-system)
-   (arguments
-    `(#:tests? #f))
-   (propagated-inputs
-    `(("python-pockets" ,python-pockets)
-      ("python-setuptools" ,python-setuptools)
-      ("python-six" ,python-six)))
-   (home-page
-    "https://sphinxcontrib-napoleon.readthedocs.io")
-   (synopsis "Sphinx \"napoleon\" extension.")
-   (description "Sphinx \"napoleon\" extension.")
-   (license license:bsd-3)))
-
 (define-public python-mando-0.3.1
   (package
     (name "python-mando")
@@ -124,7 +72,7 @@
     (propagated-inputs
      `(("python-rst2ansi" ,python-rst2ansi)))
     (native-inputs
-     `(("python-sphinx-new" ,python-sphinx-new)))
+     `(("python-sphinx" ,python-sphinx-1.5.2)))
     (arguments
      `(#:tests? #f))
     (home-page "https://mando.readthedocs.org/")
@@ -150,7 +98,7 @@
     (propagated-inputs
      `(("python-rst2ansi" ,python-rst2ansi)))
     (native-inputs
-     `(("python-sphinx-new" ,python-sphinx-new)))
+     `(("python-sphinx-1.5.2" ,python-sphinx-1.5.2)))
     (arguments
      `(#:tests? #f))
     (home-page "https://mando.readthedocs.org/")
@@ -190,6 +138,88 @@
  * the Maintainability Index (a Visual Studio metric)")
     (license license:expat)))
 
+(define-public python-httpbin
+  (package
+  (name "python-httpbin")
+  (version "0.5.0")
+  (source
+    (origin
+      (method url-fetch)
+      (uri (pypi-uri "httpbin" version))
+      (sha256
+        (base32
+          "1dc92lnk846hpilslrqnr63x55cxll4qx88gif8fm521gv9cbyvr"))))
+  (build-system python-build-system)
+  (propagated-inputs
+    `(("python-decorator" ,python-decorator)
+      ("python-flask" ,python-flask)
+      ("python-itsdangerous" ,python-itsdangerous)
+      ("python-markupsafe" ,python-markupsafe)
+      ("python-setuptools" ,python-setuptools)
+      ("python-six" ,python-six)))
+  (home-page "https://github.com/Runscope/httpbin")
+  (synopsis "HTTP Request and Response Service")
+  (description "HTTP Request and Response Service")
+  (license license:expat)))
+
+(define-public python-pytest-httpbin
+  (package
+   (name "python-pytest-httpbin")
+   ;; (version "0.2.3")
+   (version "0.0.7")
+   ;; (source
+   ;;  (origin
+   ;;   (method url-fetch)
+   ;;   (uri (pypi-uri "pytest-httpbin" version))
+   ;;   (sha256
+   ;;    (base32
+   ;;     "1y0v2v7xpzpyd4djwp7ad8ifnlxp8r1y6dfbxg5ckzvllkgridn5"))))
+   (source
+    (origin
+     (method url-fetch)
+     (uri (pypi-uri "pytest-httpbin" version))
+     (sha256
+      (base32
+       "08ghq923dn33rllip3vap2p9fb680g0i96jdn5lcpfy8amq8mbq3"))))
+   (build-system python-build-system)
+   (propagated-inputs
+    `(("python-setuptools" ,python-setuptools)
+      ("python-six" ,python-six)
+      ("python-httpbin" ,python-httpbin)))
+   (arguments
+    `(#:tests? #f))
+   (home-page
+    "https://github.com/kevin1024/pytest-httpbin")
+   (synopsis
+    "Easily test your HTTP library against a local copy of httpbin")
+   (description
+    "Easily test your HTTP library against a local copy of httpbin")
+   (license license:expat)))
+
+(define-public python-httpretty
+  (package
+   (name "python-httpretty")
+   (version "0.8.14")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (pypi-uri "httpretty" version))
+     (sha256
+      (base32
+       "0vlp5qkyw3pxwwsg7xmdcfh1csvypvaz4m6abida8s4xmjxpdhc3"))))
+   (build-system python-build-system)
+   (propagated-inputs
+    `(("python-setuptools" ,python-setuptools)))
+   (inputs
+    `(("python-sphinx-rtd-theme" ,python-sphinx-rtd-theme-0.1.9)))
+   (arguments
+    `(#:tests? #f))
+   (home-page
+    "http://github.com/gabrielfalcao/httpretty")
+   (synopsis "HTTP client mock for Python")
+   (description "HTTP client mock for Python")
+   (license license:expat)))
+
 (define-public python-xenon
   (package
     (name "python-xenon")
@@ -197,11 +227,7 @@
     (source
      (origin
        (method url-fetch)
-       (uri (string-append
-             "https://pypi.python.org/packages/0d/60/649ef1567dac76bf680d5d7498e37d9bf745"
-             "f6a6214da7e5dba530c25481/xenon-"
-             version
-             ".tar.gz"))
+       (uri (pypi-uri "xenon" version))
        (sha256
         (base32
          "1c03nis488ls50cgcq7ghbj55nxsi6a9683lsvg6z6vaj4smc8g8"))))
@@ -209,8 +235,11 @@
     (inputs
      `(("python-pyyaml" ,python-pyyaml)
        ("python-radon" ,python-radon)
-       ("python-requests" ,python-requests)
-       ("python-pyyaml" ,python-pyyaml)))
+       ("python-requests" ,python-requests-2.10.0)
+       ("python-pyyaml" ,python-pyyaml)
+       ("python-httpretty" ,python-httpretty)))
+    (arguments
+     `(#:tests? #f))
     (home-page "https://xenon.readthedocs.org/")
     (synopsis
      "Monitor code metrics for Python on your CI server")
@@ -248,7 +277,8 @@
                        ;; This phase fixes the issue, borrowing from phase
                        ;; ensure-no-mtimes-pre-1980 in guix/build/python-build-system.scm
                        (setenv "SOURCE_DATE_EPOCH" "315619200")
-                       #t)))))
+                       #t)))
+       #:tests? #f))
     (inputs
      `(("python-enum34" ,python-enum34)
        ("python-tox" ,python-tox)
@@ -274,6 +304,27 @@
  data structures, or boltons has generally")
     (license license:isc)))
 
+(define-public python-typing
+  (package
+   (name "python-typing")
+   (version "3.5.3.0")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (pypi-uri "typing" version))
+     (sha256
+      (base32
+       "08gz3grrh3vph5ib1w5x1ssnpzvj077x030lx63fxs4kwg3slbfa"))))
+   (build-system python-build-system)
+   (propagated-inputs
+    `(("python-setuptools" ,python-setuptools)))
+   (arguments
+    `(#:tests? #f))
+   (home-page "https://docs.python.org/3.5/library/typing.html")
+   (synopsis "Type Hints for Python")
+   (description "Type Hints for Python")
+   (license license:psfl)))
+
 (define-public python-ruamel.yaml
   (package
     (name "python-ruamel.yaml")
@@ -287,8 +338,8 @@
          "06x7vpjpnm17wrwkqras3a9xzivfvjs59qksrqssdm5190v6bzbw"))))
     (build-system python-build-system)
     (inputs
-     `(("python-ruamel.ordereddict"
-        ,python-ruamel.ordereddict)
+     `(("python2-ruamel.ordereddict"
+        ,python2-ruamel.ordereddict)
       ("python-typing" ,python-typing)))
     (home-page "https://bitbucket.org/ruamel/yaml")
   (synopsis
