@@ -136,3 +136,43 @@ Sorted dictionaries are also provided.  Currently only with @dfn{Key Sorted
 Order} (KSO, no sorting function can be specified, but a transform can be
 specified to apply on the key before comparison (e.g. @code{string.lower})).")
     (license license:expat)))
+
+(define-public python-sphinx-alabaster-theme
+  (package
+    (name "python-sphinx-alabaster-theme")
+    (version "0.7.9")
+    (source (origin
+              (method url-fetch)
+              (uri (pypi-uri "alabaster" version))
+              (sha256
+               (base32
+                "027anxzcb951gjlcc43y3rbn9qrw36d16vj9wd2smv5410xx9bs7"))))
+    (build-system python-build-system)
+    (propagated-inputs
+     `(("python-pygments" ,python-pygments)))
+    (home-page "https://alabaster.readthedocs.io/")
+    (synopsis "Configurable sidebar-enabled Sphinx theme")
+    (description "Alabaster is a visually (c)lean, responsive, configurable
+theme for the Sphinx documentation system.  It's the default theme of Sphinx.")
+    (license license:bsd-3)))
+
+(define-public python-snowballstemmer
+  (package
+    (name "python-snowballstemmer")
+    (version "1.2.1")
+    (source (origin
+              (method url-fetch)
+              (uri (pypi-uri "snowballstemmer" version))
+              (sha256
+               (base32
+                "0a0idq4y5frv7qsg2x62jd7rd272749xk4x99misf5rcifk2d7wi"))))
+    (build-system python-build-system)
+    (arguments
+     `(;; No tests exist
+       #:tests? #f))
+    (home-page "https://github.com/shibukawa/snowball_py")
+    (synopsis "Snowball stemming library collection for Python")
+    (description "This package provides 16 word stemmer algorithms generated
+from Snowball algorithms.  It includes the 15 original ones plus the Poerter
+English stemmer.")
+    (license license:bsd-3)))
