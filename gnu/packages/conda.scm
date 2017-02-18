@@ -30,6 +30,54 @@
   #:use-module (gnu packages base)
   #:use-module (gnu packages accepted))
 
+(define-public python-pockets
+  (package
+   (name "python-pockets")
+   (version "0.3.1")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (pypi-uri "pockets" version))
+     (sha256
+      (base32
+       "1l2v6522p1ybijawrr0rk5pr8rxciimgiw8bkjny4xxnqjjilzgc"))))
+   (build-system python-build-system)
+   (arguments
+    `(#:tests? #f))
+   (propagated-inputs
+    `(("python-setuptools" ,python-setuptools)
+      ("python-six" ,python-six)))
+   (home-page "http://pockets.readthedocs.org")
+   (synopsis
+    "A collection of helpful Python tools!")
+   (description
+    "A collection of helpful Python tools!")
+   (license license:bsd-3)))
+
+(define-public python-sphinxcontrib-napoleon
+  (package
+   (name "python-sphinxcontrib-napoleon")
+   (version "0.6.0")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (pypi-uri "sphinxcontrib-napoleon" version))
+     (sha256
+      (base32
+       "0bqs1n4r00xdm18hpcvcb8ik5shcj7pdwny5fcz62hj3kdzdka3y"))))
+   (build-system python-build-system)
+   (arguments
+    `(#:tests? #f))
+   (propagated-inputs
+    `(("python-pockets" ,python-pockets)
+      ("python-setuptools" ,python-setuptools)
+      ("python-six" ,python-six)))
+   (home-page
+    "https://sphinxcontrib-napoleon.readthedocs.io")
+   (synopsis "Sphinx \"napoleon\" extension.")
+   (description "Sphinx \"napoleon\" extension.")
+   (license license:bsd-3)))
+
 (define-public python-mando
   (package
     (name "python-mando")
@@ -42,10 +90,14 @@
         (base32
          "1bicmnxzxi9bxz9bfgv2rk7297f5rbwc9v2hg2rqfqr6h27zjgw5"))))
     (build-system python-build-system)
+    (arguments
+     `(#:python ,python-2))
     (propagated-inputs
-     `(("python-rst2ansi" ,python-rst2ansi)))
+     `(("python-setuptools" ,python-setuptools)
+       ("python-rst2ansi" ,python-rst2ansi)))
     (native-inputs
-     `(("python-sphinx" ,python-sphinx)))
+     `(("python-sphinx" ,python-sphinx)
+       ("python-sphinxcontrib-napoleon" ,python-sphinxcontrib-napoleon)))
     (home-page "https://mando.readthedocs.org/")
     (synopsis
      "Wrapper around argparse, allowing creation of complete CLI applications")
