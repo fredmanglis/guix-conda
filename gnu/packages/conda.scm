@@ -27,7 +27,8 @@
   #:use-module (gnu packages python)
   #:use-module (gnu packages version-control)
   #:use-module (gnu packages gcc)
-  #:use-module (gnu packages base))
+  #:use-module (gnu packages base)
+  #:use-module (gnu packages accepted))
 
 (define-public python-mando
   (package
@@ -50,7 +51,7 @@
      "Wrapper around argparse, allowing creation of complete CLI applications")
     (description
      "This package is a wrapper around argparse, allowing you to write complete CLI
- applications in seconds while maintaining all the flexibility")
+ applications in seconds while maintaining all the flexibility.")
     (license license:expat)))
 
 (define-public python-radon
