@@ -30,6 +30,35 @@
   #:use-module (gnu packages base)
   #:use-module (gnu packages accepted))
 
+(define-public python-sphinx-new
+  (package
+   (name "python-sphinx-new")
+   (version "1.5.2")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (pypi-uri "Sphinx" version))
+     (sha256
+      (base32
+       "08n765wix63yfvxhnrhlahb2wqn877ypdpnldr571r0974wli704"))))
+   (build-system python-build-system)
+   (propagated-inputs
+    `(("python-sphinx-alabaster-theme" ,python-sphinx-alabaster-theme)
+      ("python-babel" ,python-babel)
+      ("python-docutils" ,python-docutils)
+      ("python-imagesize" ,python-imagesize)
+      ("python-jinja2" ,python-jinja2)
+      ("python-pygments" ,python-pygments)
+      ("python-requests" ,python-requests)
+      ("python-setuptools" ,python-setuptools)
+      ("python-six" ,python-six)
+      ("python-snowballstemmer"
+       ,python-snowballstemmer)))
+   (home-page "http://sphinx-doc.org/")
+   (synopsis "Python documentation generator")
+   (description "Python documentation generator")
+   (license license:bsd-3)))
+
 (define-public python-pockets
   (package
    (name "python-pockets")
@@ -90,14 +119,12 @@
         (base32
          "1bicmnxzxi9bxz9bfgv2rk7297f5rbwc9v2hg2rqfqr6h27zjgw5"))))
     (build-system python-build-system)
-    (arguments
-     `(#:python ,python-2))
     (propagated-inputs
-     `(("python-setuptools" ,python-setuptools)
-       ("python-rst2ansi" ,python-rst2ansi)))
+     `(("python-rst2ansi" ,python-rst2ansi)))
     (native-inputs
-     `(("python-sphinx" ,python-sphinx)
-       ("python-sphinxcontrib-napoleon" ,python-sphinxcontrib-napoleon)))
+     `(("python-sphinx-new" ,python-sphinx-new)))
+    (arguments
+     `(#:tests? #f))
     (home-page "https://mando.readthedocs.org/")
     (synopsis
      "Wrapper around argparse, allowing creation of complete CLI applications")
