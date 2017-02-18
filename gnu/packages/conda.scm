@@ -107,6 +107,34 @@
    (description "Sphinx \"napoleon\" extension.")
    (license license:bsd-3)))
 
+(define-public python-mando-0.3.1
+  (package
+    (name "python-mando")
+    (version "0.3.1")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://github.com/rubik/mando/archive/v"
+                           version
+                           ".tar.gz"))
+       (sha256
+        (base32
+         "17jlkdpqw22z1nyml5ybslilqkzmnk0dxxjml8bfghav1l5hbwd2"))))
+    (build-system python-build-system)
+    (propagated-inputs
+     `(("python-rst2ansi" ,python-rst2ansi)))
+    (native-inputs
+     `(("python-sphinx-new" ,python-sphinx-new)))
+    (arguments
+     `(#:tests? #f))
+    (home-page "https://mando.readthedocs.org/")
+    (synopsis
+     "Wrapper around argparse, allowing creation of complete CLI applications")
+    (description
+     "This package is a wrapper around argparse, allowing you to write complete CLI
+ applications in seconds while maintaining all the flexibility.")
+    (license license:expat)))
+
 (define-public python-mando
   (package
     (name "python-mando")
@@ -149,7 +177,9 @@
      `(("python-colorama" ,python-colorama)
        ("python-flake8-polyfill"
         ,python-flake8-polyfill)
-       ("python-mando" ,python-mando)))
+       ("python-mando" ,python-mando-0.3.1)))
+    (arguments
+     `(#:tests? #f))
     (home-page "https://radon.readthedocs.org/")
     (synopsis "Code Metrics in Python")
     (description "Radon is a Python tool which computes various code metrics.  Supported
