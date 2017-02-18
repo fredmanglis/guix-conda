@@ -427,21 +427,20 @@
                                                     #:directories? #t))
                                  (inter (lset-difference eqv? after before)))
                             (for-each delete-file-recursively inter))))))
-         ;; (replace 'install
-         ;;          (lambda* (#:key outputs (configure-flags '())
-         ;;                    use-setuptools? #:allow-other-keys)
-         ;;            (let* ((out (assoc-ref outputs "out"))
-         ;;                   (params (append (list (string-append "--prefix=" out))
-         ;;                                   (if use-setuptools?
-         ;;                                       ;; distutils does not accept these flags
-         ;;                                       (list "--single-version-externally-managed"
-         ;;                                             "--root=/")
-         ;;                                       '())
-         ;;                                   configure-flags)))
-         ;;              ;;(call-setuppy "install" params use-setuptools?)
-         ;;              (apply system* "python" "utils/setup-testing.py"
-         ;;                     "install" '()))))
-         )
+         (replace 'install
+                  (lambda* (#:key outputs (configure-flags '())
+                            use-setuptools? #:allow-other-keys)
+                    (let* ((out (assoc-ref outputs "out"))
+                           (params (append (list (string-append "--prefix=" out))
+                                           (if use-setuptools?
+                                               ;; distutils does not accept these flags
+                                               (list "--single-version-externally-managed"
+                                                     "--root=/")
+                                               '())
+                                           configure-flags)))
+                      ;;(call-setuppy "install" params use-setuptools?)
+                      (apply system* "python" "utils/setup-testing.py"
+                             "install" '())))))
        #:tests? #f))
     (inputs
      `(("python-requests" ,python-requests)
@@ -449,4 +448,5 @@
        ("git" ,git)
        ("python-pyyaml" ,python-pyyaml)
        ("python-pycosat" ,python-pycosat)
-       ("python-ruamel.yaml" ,python-ruamel.yaml)))))
+       ;; ("python-ruamel.yaml" ,python-ruamel.yaml)
+       ))))
