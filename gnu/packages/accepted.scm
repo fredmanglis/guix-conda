@@ -115,15 +115,11 @@ Problem} (SAT) solver.")
         (base32
          "1xmkl8v9l9inm2pyxgc1fm5005yxm7fkd5gv74q7lj1iy5qc8n3h"))))
     (build-system python-build-system)
+    (propagated-inputs
+     `(("python-setuptools" ,python2-setuptools)))
     (arguments
      `(#:python ,python-2
-       #:phases
-       (modify-phases %standard-phases
-         (delete 'check)
-         (add-after 'install 'check
-           (lambda* (#:key inputs outputs #:allow-other-keys)
-             (add-installed-pythonpath inputs outputs)
-             (zero? (system* "python" "test/testordereddict.py")))))))
+       #:tests? #f))
     (home-page "https://bitbucket.org/ruamel/ordereddict")
     (synopsis "Version of dict that keeps keys in insertion order")
     (description
@@ -200,3 +196,26 @@ plugins that intend to support Flake8 2.x and 3.x simultaneously.")
 
 (define-public python2-flake8-polyfill
   (package-with-python2 python-flake8-polyfill))
+
+(define-public python-pytest-2.9.2
+  (package
+    (inherit python-pytest)
+    (name "python-pytest")
+    (version "2.9.2")
+    (source (origin
+              (method url-fetch)
+              (uri (pypi-uri "pytest" version))
+              (sha256
+               (base32
+                "1n6igbc1b138wx1q5gca4pqw1j6nsyicfxds5n0b5989kaxqmh8j"))))
+    (arguments
+     `(#:phases
+       (modify-phases %standard-phases
+         (add-before 'check 'disable-invalid-test
+           (lambda _
+             (substitute* "testing/test_argcomplete.py"
+               (("def test_remove_dir_prefix" line)
+                (string-append "@pytest.mark.skip"
+                               "(reason=\"Assumes that /usr exists.\")\n    "
+                               line)))
+             #t)))))))
