@@ -91,6 +91,8 @@ it with different test data, and make it appear as multiple test cases.")
          "1kl3wh1f47rc712n4bmwplbx3fqz3x9i1b587jrbpmvdva4c8f6l"))))
     ;; TODO: Unundle picosat. http://fmv.jku.at/picosat/
     (build-system python-build-system)
+    (arguments
+     `(#:tests? #f))
     (home-page "https://github.com/ContinuumIO/pycosat")
     (synopsis "Bindings to picosat (a SAT solver)")
     (description
