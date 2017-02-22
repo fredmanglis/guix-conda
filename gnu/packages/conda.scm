@@ -414,7 +414,7 @@
                          #t)))
          (replace 'build
                   (lambda* (#:key use-setuptools? #:allow-other-keys)
-                    (apply system* "python" "utils/setup-testing.py" "build" '())))
+                    (apply system* "python" "utils/setup-testing.py" "bdist" '())))
          (replace 'check
                   (lambda* (#:key tests? test-target use-setuptools? #:allow-other-keys)
                     (if tests?
@@ -437,10 +437,31 @@
                                                (list "--single-version-externally-managed"
                                                      "--root=/")
                                                '())
-                                           configure-flags)))
+                                           configure-flags))
+                           (main-dir (getcwd))
+                           (dist-dir (string-append main-dir "/dist"))
+                           (build-dir (string-append main-dir "/build"))
+                           (dir-stream (opendir dist-dir))
+                           (tar-file (string-append dist-dir "/" (readdir dir-stream))))
+                      (display "OUTPUT GOES TO::::")
+                      (display out) (newline)
+                      (display "WITH PARAMETERS::::")
+                      (display params) (newline)
                       ;;(call-setuppy "install" params use-setuptools?)
                       (apply system* "python" "utils/setup-testing.py"
-                             "install" '())))))
+                             "install" params)
+                      (chdir build-dir)
+                      (system* "tar" "-xvzf" tar-file "--strip-components=4")
+                      (chdir main-dir)
+                      (closedir dir-stream)
+                      (system* "cp"
+                               "-fvR"
+                               (string-append build-dir "/bin")
+                               out)
+                      (system* "cp"
+                               "-fvR"
+                               (string-append build-dir "/lib")
+                               out)))))
        #:tests? #f))
     (inputs
      `(("python-requests" ,python-requests)
