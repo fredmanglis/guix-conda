@@ -337,15 +337,42 @@
         (base32
          "06x7vpjpnm17wrwkqras3a9xzivfvjs59qksrqssdm5190v6bzbw"))))
     (build-system python-build-system)
-    (inputs
+    (propagated-inputs
      `(("python2-ruamel.ordereddict"
-        ,python2-ruamel.ordereddict)
-      ("python-typing" ,python-typing)))
+        ,python2-ruamel.ordereddict)))
+    (inputs
+     `(("python-typing" ,python-typing)))
+    (arguments
+     '(#:phases
+       (modify-phases
+        %standard-phases
+        (add-before 'install
+                    'build-binary
+                    (lambda* (#:key use-setuptools? #:allow-other-keys)
+                      (apply system* "python" "setup.py" "bdist" '())))
+        (replace 'install
+                 (lambda* (#:key outputs (configure-flags '())
+                           use-setuptools? #:allow-other-keys)
+                   (let* ((out (assoc-ref outputs "out"))
+                          (main-dir (getcwd))
+                          (dist-dir (string-append main-dir "/dist"))
+                          (build-dir (string-append main-dir "/build"))
+                          (dir-stream (opendir dist-dir))
+                           (tar-file (string-append dist-dir "/" (readdir dir-stream))))
+                     (chdir dist-dir)
+                     (do ((file-entry (readdir dir-stream) (readdir dir-stream)))
+                         ((eof-object? file-entry))
+                       (let ((obj-stat (stat file-entry)))
+                         (unless (eq? (stat:type obj-stat) 'directory)
+                           (system* "tar" "-xvzf" file-entry "--strip-components=4"))))
+                     (system* "cp" "-fvR" "lib" out)
+                     (chdir main-dir)
+                     (closedir dir-stream)))))))
     (home-page "https://bitbucket.org/ruamel/yaml")
-  (synopsis
-   "This package provide a YAML 1.2 loader/dumper for Python")
-  (description
-   "This package provides YAML parser/emitter that supports roundtrip preservation of
+    (synopsis
+     "This package provide a YAML 1.2 loader/dumper for Python")
+    (description
+     "This package provides YAML parser/emitter that supports roundtrip preservation of
  comments, seq/map flow style, and map key order.  It is a derivative of Kirill Simonov’s
  PyYAML 3.11.  It supports YAML 1.2 and has round-trip loaders and dumpers that preserves
 , among others:
@@ -443,11 +470,6 @@
                            (build-dir (string-append main-dir "/build"))
                            (dir-stream (opendir dist-dir))
                            (tar-file (string-append dist-dir "/" (readdir dir-stream))))
-                      (display "OUTPUT GOES TO::::")
-                      (display out) (newline)
-                      (display "WITH PARAMETERS::::")
-                      (display params) (newline)
-                      ;;(call-setuppy "install" params use-setuptools?)
                       (apply system* "python" "utils/setup-testing.py"
                              "install" params)
                       (chdir build-dir)
@@ -463,11 +485,11 @@
                                (string-append build-dir "/lib")
                                out)))))
        #:tests? #f))
+    (propagated-inputs
+     `(("python-ruamel.yaml" ,python-ruamel.yaml)))
     (inputs
      `(("python-requests" ,python-requests)
        ("python-auxlib" ,python-auxlib)
        ("git" ,git)
        ("python-pyyaml" ,python-pyyaml)
-       ("python-pycosat" ,python-pycosat)
-       ;; ("python-ruamel.yaml" ,python-ruamel.yaml)
-       ))))
+       ("python-pycosat" ,python-pycosat)))))
