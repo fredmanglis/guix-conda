@@ -425,6 +425,28 @@
  is BSD licensed open source.")
     (license license:bsd-3)))
 
+(define-public python-typing
+  (package
+   (name "python-typing")
+   (version "3.5.3.0")
+   (source
+    (origin
+     (method url-fetch)
+     (uri (pypi-uri "typing" version))
+      (sha256
+       (base32
+        "08gz3grrh3vph5ib1w5x1ssnpzvj077x030lx63fxs4kwg3slbfa"))))
+   (build-system python-build-system)
+   (arguments
+    `(#:tests? #f))
+   (propagated-inputs
+    `(("python-setuptools" ,python-setuptools)))
+   (home-page
+    "https://docs.python.org/3.5/library/typing.html")
+   (synopsis "Type Hints for Python")
+   (description "Type Hints for Python")
+   (license #f)))
+
 (define-public python-conda-executable
   (package
     (inherit python-conda)
@@ -486,7 +508,8 @@
                                out)))))
        #:tests? #f))
     (propagated-inputs
-     `(("python-ruamel.yaml" ,python-ruamel.yaml)))
+     `(("python-ruamel.yaml" ,python-ruamel.yaml)
+       ("python-typing" ,python-typing)))
     (inputs
      `(("python-requests" ,python-requests)
        ("python-auxlib" ,python-auxlib)
