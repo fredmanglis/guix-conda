@@ -325,32 +325,10 @@
    (description "Type Hints for Python")
    (license license:psfl)))
 
-(define-public python-typing
-  (package
-   (name "python-typing")
-   (version "3.5.3.0")
-   (source
-    (origin
-     (method url-fetch)
-     (uri (pypi-uri "typing" version))
-      (sha256
-       (base32
-        "08gz3grrh3vph5ib1w5x1ssnpzvj077x030lx63fxs4kwg3slbfa"))))
-   (build-system python-build-system)
-   (arguments
-    `(#:tests? #f))
-   (propagated-inputs
-    `(("python-setuptools" ,python-setuptools)))
-   (home-page
-    "https://docs.python.org/3.5/library/typing.html")
-   (synopsis "Type Hints for Python")
-   (description "Type Hints for Python")
-   (license #f)))
-
 (define-public python-ruamel.yaml
   (package
-    (name "python-ruamel.yaml")
-    (version "0.13.13")
+   (name "python-ruamel.yaml")
+   (version "0.13.13")
     (source
      (origin
        (method url-fetch)
@@ -358,60 +336,18 @@
        (sha256
         (base32
          "06x7vpjpnm17wrwkqras3a9xzivfvjs59qksrqssdm5190v6bzbw"))))
-    (build-system python-build-system)
-    (propagated-inputs
-     `(("python2-ruamel.ordereddict"
-        ,python2-ruamel.ordereddict)
-       ("python-typing" ,python-typing)))
-    (arguments
-     '(#:phases
-       (modify-phases
-        %standard-phases
-        (add-before 'install
-                    'build-binary
-                    (lambda* (#:key use-setuptools? #:allow-other-keys)
-                      (apply system* "python" "setup.py" "bdist" '())))
-        (replace 'install
-                 (lambda* (#:key inputs outputs (configure-flags '())
-                           use-setuptools? #:allow-other-keys)
-                   (let* ((out (assoc-ref outputs "out"))
-                          (python-dir (assoc-ref inputs "python"))
-                          (main-dir (getcwd))
-                          (dist-dir (string-append main-dir "/dist"))
-                          (build-dir (string-append main-dir "/build"))
-                          (dir-stream (opendir dist-dir))
-                          (tar-file (string-append dist-dir "/" (readdir dir-stream)))
-                          (out-dir-lst (string-split out #\/))
-                          (out-dir-name (list-ref out-dir-lst (- (length out-dir-lst) 1))))
-                     (chdir dist-dir)
-                     (do ((file-entry (readdir dir-stream) (readdir dir-stream)))
-                         ((eof-object? file-entry))
-                       (let ((obj-stat (stat file-entry)))
-                         (unless (eq? (stat:type obj-stat) 'directory)
-                           (system* "tar" "-xvzf" file-entry "--strip-components=3"))))
-                     (closedir dir-stream)
-                     (set! dir-stream (opendir dist-dir))
-                     (do ((file-entry (readdir dir-stream) (readdir dir-stream)))
-                         ((eof-object? file-entry))
-                       (let ((obj-stat (stat file-entry)))
-                         (when (eq? (stat:type obj-stat) 'directory)
-                           (unless (eq? (string-ref file-entry 0) #\.)
-                             (system* "cp" "-fvR" file-entry out)))))
-                     (chdir main-dir)
-                     (closedir dir-stream)))))))
-    (home-page "https://bitbucket.org/ruamel/yaml")
-    (synopsis
-     "This package provide a YAML 1.2 loader/dumper for Python")
-    (description
-     "This package provides YAML parser/emitter that supports roundtrip preservation of
- comments, seq/map flow style, and map key order.  It is a derivative of Kirill Simonov’s
- PyYAML 3.11.  It supports YAML 1.2 and has round-trip loaders and dumpers that preserves
-, among others:
- * comments
- * block style and key ordering are kept, so you can diff the round-tripped source
- * flow style sequences ( ‘a: b, c, d’) (based on request and test by Anthony Sottile)
- * anchors names that are hand-crafted (i.e. not of the form``idNNN``)
- * merges in dictionaries are preserved")
+   (build-system python-build-system)
+   (propagated-inputs
+    `(("python-typing" ,python-typing)))
+   (home-page "https://bitbucket.org/ruamel/yaml")
+   (synopsis
+    "YAML 1.2 parser/emitter")
+   (description
+    "This package provides YAML parser/emitter that supports roundtrip
+preservation of comments, seq/map flow style, and map key order.  It
+is a derivative of Kirill Simonov’s PyYAML 3.11.  It supports YAML 1.2
+and has round-trip loaders and dumpers. It supports comments. Block
+style and key ordering are kept, so you can diff the source.")
   (license license:expat)))
 
 (define-public python-conda
@@ -449,17 +385,18 @@
     (synopsis
      "Cross-platform, OS-agnostic, system-level binary package manager")
     (description
-     "Conda is a cross-platform, Python-agnostic binary package manager.  It is the
- package manager used by Anaconda installations, but it may be used for other systems as
- well.  Conda makes environments first-class citizens, making it easy to create
- independent environments even for C libraries.  Conda is written entirely in Python, and
- is BSD licensed open source.")
+     "Conda is a cross-platform, Python-agnostic binary package
+manager.  It is the package manager used by Anaconda installations,
+but it may be used for other systems as well.  Conda makes
+environments first-class citizens, making it easy to create
+independent environments even for C libraries.  Conda is written
+entirely in Python, and is BSD licensed open source.")
     (license license:bsd-3)))
 
-(define-public python-conda-executable
+(define-public conda
   (package
     (inherit python-conda)
-    (name "python-conda-executable")
+    (name "conda")
     (arguments
      '(#:phases
        (modify-phases %standard-phases
