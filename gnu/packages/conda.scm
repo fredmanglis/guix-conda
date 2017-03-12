@@ -325,31 +325,54 @@
    (description "Type Hints for Python")
    (license license:psfl)))
 
-(define-public python-typing
+(define-public python-ruamel.ordereddict
   (package
-   (name "python-typing")
-   (version "3.5.3.0")
+   (name "python-ruamel.ordereddict")
+   (version "0.4.9")
    (source
     (origin
      (method url-fetch)
-     (uri (pypi-uri "typing" version))
-      (sha256
-       (base32
-        "08gz3grrh3vph5ib1w5x1ssnpzvj077x030lx63fxs4kwg3slbfa"))))
+     (uri (string-append
+           "https://pypi.python.org/packages/b1/17/97868578071068fe7d115672b52624d421ff24e5e802f65d6bf3ea184e8f/ruamel.ordereddict-"
+           version
+           ".tar.gz"))
+     (sha256
+      (base32
+       "1xmkl8v9l9inm2pyxgc1fm5005yxm7fkd5gv74q7lj1iy5qc8n3h"))))
    (build-system python-build-system)
-   (arguments
-    `(#:tests? #f))
-   (propagated-inputs
-    `(("python-setuptools" ,python-setuptools)))
    (home-page
-    "https://docs.python.org/3.5/library/typing.html")
-   (synopsis "Type Hints for Python")
-   (description "Type Hints for Python")
-   (license #f)))
+    "https://bitbucket.org/ruamel/ordereddict")
+   (synopsis
+    "a version of dict that keeps keys in insertion resp. sorted order")
+   (description
+    "a version of dict that keeps keys in insertion resp. sorted order")
+   (license license:expat)))
 
 (define-public python-ruamel.yaml
   (package
-    (name "python-ruamel.yaml")
+   (name "python-ruamel.yaml")
+   (version "0.13.13")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (pypi-uri "ruamel.yaml" version))
+       (sha256
+        (base32
+         "06x7vpjpnm17wrwkqras3a9xzivfvjs59qksrqssdm5190v6bzbw"))))
+   (build-system python-build-system)
+   (propagated-inputs
+    `( ; ("python-ruamel.ordereddict" ,python-ruamel.ordereddict)
+      ("python-typing" ,python-typing)))
+   (home-page "https://bitbucket.org/ruamel/yaml")
+   (synopsis
+    "ruamel.yaml is a YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order")
+  (description
+   "ruamel.yaml is a YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order")
+  (license license:expat)))
+
+(define-public python-ruamel.yaml-old
+  (package
+    (name "python-ruamel.yaml-old")
     (version "0.13.13")
     (source
      (origin
@@ -360,7 +383,7 @@
          "06x7vpjpnm17wrwkqras3a9xzivfvjs59qksrqssdm5190v6bzbw"))))
     (build-system python-build-system)
     (propagated-inputs
-     `(("python2-ruamel.ordereddict"
+     `(("python2-ruamel.ordereddict" ; why using python2 here? Rest is python3
         ,python2-ruamel.ordereddict)
        ("python-typing" ,python-typing)))
     (arguments
@@ -456,10 +479,10 @@
  is BSD licensed open source.")
     (license license:bsd-3)))
 
-(define-public python-conda-executable
+(define-public conda
   (package
-    (inherit python-conda)
-    (name "python-conda-executable")
+    (inherit conda)
+    (name "conda")
     (arguments
      '(#:phases
        (modify-phases %standard-phases
