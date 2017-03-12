@@ -481,7 +481,7 @@
 
 (define-public conda
   (package
-    (inherit conda)
+    (inherit python-conda)
     (name "conda")
     (arguments
      '(#:phases
